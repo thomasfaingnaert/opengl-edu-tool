@@ -3,11 +3,12 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions_3_2_Core>
+#include <QWidget>
 
 class SceneWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_2_Core
 {
 public:
-    SceneWidget();
+    SceneWidget(QWidget *parent = 0);
     ~SceneWidget();
 
 protected:
