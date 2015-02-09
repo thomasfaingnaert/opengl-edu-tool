@@ -18,8 +18,10 @@ UI_DIR = ../build/ui
 OBJECTS_DIR = ../build/obj
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    scenewidget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    scenewidget.h
 
 FORMS    += mainwindow.ui
