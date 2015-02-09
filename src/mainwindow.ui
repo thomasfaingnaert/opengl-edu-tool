@@ -28,12 +28,19 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QOpenGLWidget" name="openGLWidget"/>
+     <widget class="SceneWidget" name="openGLWidget"/>
     </item>
    </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SceneWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>scenewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
