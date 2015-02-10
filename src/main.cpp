@@ -1,14 +1,19 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <exception>
-#include <iostream>
+#include <QMessageBox>
+#include <QString>
 #include <cstdlib>
+#include <exception>
 
 int main(int argc, char *argv[])
 {
+    // The QApplication is outside the try-catch because
+    // QMessageBox requires an active QApplication to work.
+
+    QApplication a(argc, argv);
+
     try
     {
-        QApplication a(argc, argv);
         MainWindow w;
         w.show();
 
@@ -16,7 +21,8 @@ int main(int argc, char *argv[])
     }
     catch (const std::exception &ex)
     {
-        std::cerr << "Fatal Error: " << ex.what() << "\nThe application will now exit." << std::endl;
+        QString errMsg = QString(ex.what()) + "\nThe application will now exit.";
+        QMessageBox::critical(nullptr, "Fatal Error", errMsg);
         return EXIT_FAILURE;
     }
 }
