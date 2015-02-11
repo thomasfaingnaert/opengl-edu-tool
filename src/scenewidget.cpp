@@ -91,6 +91,9 @@ void SceneWidget::initProgram()
 
     glDeleteShader(vs);
     glDeleteShader(fs);
+
+    // Load uniforms
+    m_mvpMatrixUnif = glGetUniformLocation(m_program, "mvpMatrix");
 }
 
 std::string SceneWidget::getFileContents(const std::string &path) const
