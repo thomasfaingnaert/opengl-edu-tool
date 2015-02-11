@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QOpenGLWidget(parent)
@@ -68,6 +70,18 @@ void SceneWidget::resizeGL(int w, int h)
 {
     // Adjust viewport
     glViewport(0, 0, w, h);
+
+    // Adjust perspective matrix
+    float aspect = static_cast<float>(w) / h;
+
+    glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(2.5f, 2.5f, -1.0f));
+    glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    glm::mat4 perspective = glm::perspective(90.0f, aspect, 1.0f, 3.0f);
+
+    m_mvpMatrix = perspective * view * model;
+    glUseProgram(m_program);
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
+    glUseProgram(0);
 }
 
 void SceneWidget::initProgram()

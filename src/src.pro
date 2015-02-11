@@ -19,6 +19,8 @@ MOC_DIR = ../build/moc
 UI_DIR = ../build/ui
 OBJECTS_DIR = ../build/obj
 
+INCLUDEPATH += ../glm
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     scenewidget.cpp

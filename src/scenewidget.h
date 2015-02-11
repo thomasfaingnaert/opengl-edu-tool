@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions_3_2_Core>
 #include <QWidget>
 #include <string>
+#include <glm/glm.hpp>
 
 class SceneWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_2_Core
 {
@@ -29,6 +30,7 @@ private:
     GLuint m_positionVbo;
     GLuint m_indicesVbo;
     GLuint m_mvpMatrixUnif;
+    glm::mat4 m_mvpMatrix;
 };
 
 #endif // SCENEWIDGET_H
