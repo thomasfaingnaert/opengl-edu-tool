@@ -53,7 +53,7 @@ void SceneWidget::paintGL()
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
 
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
 
     glBindVertexArray(0);
     glUseProgram(0);
@@ -164,15 +164,69 @@ void SceneWidget::initData()
     // Data
     GLfloat data[] =
     {
-        -0.5f, -0.5f, +0.0f,
-        +0.5f, -0.5f, +0.0f,
-        +0.0f, +0.5f, +0.0f,
+        // Front face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, +1.0f, +1.0f,
+        +1.0f, +1.0f, +1.0f,
+        +1.0f, -1.0f, +1.0f,
+
+        // Right face
+        +1.0f, -1.0f, +1.0f,
+        +1.0f, +1.0f, +1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+
+        // Top face
+        -1.0f, +1.0f, +1.0f,
+        -1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, +1.0f,
+
+        // Back face
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+
+        // Left face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, +1.0f, +1.0f,
+        -1.0f, +1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+
+        // Bottom face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, -1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+        +1.0f, -1.0f, +1.0f,
     };
 
     // Indices
     GLushort indices[] =
     {
-        0, 1, 2
+        // Front face
+        0, 1, 2,
+        0, 2, 3,
+
+        // Right face
+        4, 5, 6,
+        4, 6, 7,
+
+        // Top face
+        8, 9, 10,
+        8, 10, 11,
+
+        // Back face
+        12, 14, 13,
+        12, 15, 14,
+
+        // Left face
+        16, 18, 17,
+        16, 19, 18,
+
+        // Bottom face
+        20, 22, 21,
+        20, 23, 22,
     };
 
     // Create and bind vao
