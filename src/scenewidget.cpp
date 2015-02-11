@@ -28,7 +28,11 @@ SceneWidget::~SceneWidget()
 void SceneWidget::initializeGL()
 {
     // Init opengl
-    initializeOpenGLFunctions();
+    bool success = initializeOpenGLFunctions();
+
+    // Check if opengl init was successfull
+    if (!success)
+        throw std::runtime_error("Could not load OpenGL functions.\nDo you have OpenGL v3.2?");
 
     // Print version info
     std::clog << "OpenGL version: " << glGetString(GL_VERSION) <<
