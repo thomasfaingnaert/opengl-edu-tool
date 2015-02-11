@@ -170,7 +170,7 @@ void SceneWidget::initData()
     };
 
     // Indices
-    GLshort indices[] =
+    GLushort indices[] =
     {
         0, 1, 2
     };
