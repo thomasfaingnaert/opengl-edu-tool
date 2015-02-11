@@ -27,10 +27,11 @@ private:
 
     GLuint m_program;
     GLuint m_vao;
-    GLuint m_positionVbo;
+    GLuint m_vertexDataVbo;
     GLuint m_indicesVbo;
     GLuint m_mvpMatrixUnif;
     glm::mat4 m_mvpMatrix;
+    constexpr static unsigned numOfVertices = 24;
 };
 
 #endif // SCENEWIDGET_H

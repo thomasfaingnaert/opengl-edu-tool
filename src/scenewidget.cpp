@@ -186,6 +186,8 @@ void SceneWidget::initData()
     // Data
     GLfloat data[] =
     {
+        /* POSITIONS */
+
         // Front face
         -1.0f, -1.0f, +1.0f,
         -1.0f, +1.0f, +1.0f,
@@ -221,6 +223,44 @@ void SceneWidget::initData()
         -1.0f, -1.0f, -1.0f,
         +1.0f, -1.0f, -1.0f,
         +1.0f, -1.0f, +1.0f,
+
+        /* COLORS */
+
+        // Front face
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+
+        // Right face
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+
+        // Top face
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+
+        // Back face
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+
+        // Left face
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+
+        // Bottom face
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
     };
 
     // Indices
@@ -256,17 +296,23 @@ void SceneWidget::initData()
     glBindVertexArray(m_vao);
 
     // Create and bind position vbo
-    glGenBuffers(1, &m_positionVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_positionVbo);
+    glGenBuffers(1, &m_vertexDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexDataVbo);
 
     // Create and bind indices vbo
     glGenBuffers(1, &m_indicesVbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesVbo);
 
-    // Fill position buffer & associate with attrib
+    // Fill position buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof data, data, GL_STATIC_DRAW);
+
+    // Position attrib
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Color attrib
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(numOfVertices * 3 * sizeof(GLfloat)));
 
     // Fill indices buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof indices, indices, GL_STATIC_DRAW);
