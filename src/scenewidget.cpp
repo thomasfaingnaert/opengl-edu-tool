@@ -42,6 +42,11 @@ void SceneWidget::initializeGL()
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+    // Enable face culling
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+
     initProgram();
     initData();
 }
