@@ -24,7 +24,7 @@ QString FloatSlider::getStringRep() const
     return sysLocale.toString(scaledValue(), 'f', m_precision) + suffix();
 }
 
-void FloatSlider::init(float scale, int precision, QString suffix)
+void FloatSlider::init(float scale, int precision, const QString &suffix)
 {
     setScale(scale);
     setPrecision(precision);

@@ -24,7 +24,7 @@ public:
     float scaledValue() const { return value() * scale(); }
     QString getStringRep() const;
 
-    void init(float scale = 0.1f, int precision = 1, QString suffix = "");
+    void init(float scale = 0.1f, int precision = 1, const QString &suffix = "");
 
 signals:
     void scaledValueChanged(float scaledValue);
