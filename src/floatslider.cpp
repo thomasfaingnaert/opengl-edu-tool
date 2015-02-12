@@ -23,3 +23,11 @@ QString FloatSlider::getStringRep() const
     QLocale sysLocale = QLocale::system();
     return sysLocale.toString(scaledValue(), 'f', m_precision) + suffix();
 }
+
+void FloatSlider::init(float scale, int precision, QString suffix)
+{
+    setScale(scale);
+    setPrecision(precision);
+    setSuffix(suffix);
+    emit stringValueChanged(getStringRep());
+}

@@ -24,6 +24,8 @@ public:
     float scaledValue() const { return value() * scale(); }
     QString getStringRep() const;
 
+    void init(float scale = 0.1f, int precision = 1, QString suffix = "");
+
 signals:
     void scaledValueChanged(float scaledValue);
     void stringValueChanged(QString strVal);
@@ -32,7 +34,7 @@ private slots:
     void onValueChanged(int value);
 
 private:
-    float m_scale = 0.1;
+    float m_scale = 0.1f;
     int m_precision = 1;
     QString m_suffix;
 };
