@@ -43,11 +43,18 @@ void SceneWidget::initializeGL()
                  "\nVendor: " << glGetString(GL_VENDOR) << '\n' << std::endl;
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearDepth(1.0f);
 
     // Enable face culling
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CW);
     glCullFace(GL_BACK);
+
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+    glDepthRange(0.0f, 1.0f);
 
     initProgram();
     initData();
@@ -55,7 +62,7 @@ void SceneWidget::initializeGL()
 
 void SceneWidget::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
@@ -76,7 +83,7 @@ void SceneWidget::resizeGL(int w, int h)
 
     recalcModelMatrix();
     m_viewMatrix = glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
-    m_projectionMatrix = glm::perspective(90.0f, aspect, 0.01f, 100.0f);
+    m_projectionMatrix = glm::perspective(45.0f, aspect, 0.1f, 30.0f);
 
     updateMvpMatrix();
 }
