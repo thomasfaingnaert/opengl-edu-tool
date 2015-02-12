@@ -323,9 +323,9 @@ void SceneWidget::recalcModelMatrix()
 {
     m_modelMatrix = glm::mat4();
     m_modelMatrix *= glm::translate(glm::mat4(), m_modelTranslate);
-    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.z, glm::vec3(0, 0, 1));
-    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.y, glm::vec3(0, 1, 0));
-    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.x, glm::vec3(1, 0, 0));
+    m_modelMatrix *= glm::rotate(glm::mat4(), glm::radians(m_modelRotate.z), glm::vec3(0, 0, 1));
+    m_modelMatrix *= glm::rotate(glm::mat4(), glm::radians(m_modelRotate.y), glm::vec3(0, 1, 0));
+    m_modelMatrix *= glm::rotate(glm::mat4(), glm::radians(m_modelRotate.x), glm::vec3(1, 0, 0));
     m_modelMatrix *= glm::scale(glm::mat4(), m_modelScale);
 
     updateMvpMatrix();
