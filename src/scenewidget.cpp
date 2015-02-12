@@ -75,8 +75,8 @@ void SceneWidget::resizeGL(int w, int h)
     float aspect = static_cast<float>(w) / h;
 
     recalcModelMatrix();
-    m_viewMatrix = glm::lookAt(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    m_projectionMatrix = glm::perspective(90.0f, aspect, 1.0f, 3.0f);
+    m_viewMatrix = glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
+    m_projectionMatrix = glm::perspective(90.0f, aspect, 0.01f, 100.0f);
 
     updateMvpMatrix();
 }
