@@ -21,5 +21,5 @@ void FloatSlider::onValueChanged(int)
 QString FloatSlider::getStringRep() const
 {
     QLocale sysLocale = QLocale::system();
-    return sysLocale.toString(scaledValue(), 'f', m_precision);
+    return sysLocale.toString(scaledValue(), 'f', m_precision) + suffix();
 }

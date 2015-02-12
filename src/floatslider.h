@@ -18,6 +18,9 @@ public:
     int precision() const { return m_precision; }
     void setPrecision(int precision) { m_precision = precision; }
 
+    QString suffix() const { return m_suffix; }
+    void setSuffix(const QString &suffix) { m_suffix = suffix; }
+
     float scaledValue() const { return value() * scale(); }
     QString getStringRep() const;
 
@@ -31,6 +34,7 @@ private slots:
 private:
     float m_scale = 0.1;
     int m_precision = 1;
+    QString m_suffix;
 };
 
 #endif // FLOATSLIDER_H
