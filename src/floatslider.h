@@ -29,8 +29,8 @@ private slots:
     void onValueChanged(int value);
 
 private:
-    float m_scale = 0.01;
-    int m_precision = 2;
+    float m_scale = 0.1;
+    int m_precision = 1;
 };
 
 #endif // FLOATSLIDER_H
