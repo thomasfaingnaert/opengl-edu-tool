@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
-    QOpenGLWidget(parent)
+    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
@@ -321,11 +321,12 @@ void SceneWidget::initData()
 
 void SceneWidget::recalcModelMatrix()
 {
-    m_modelMatrix = glm::scale(glm::mat4(), m_modelScale);
-    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.x, glm::vec3(1, 0, 0));
-    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.y, glm::vec3(0, 1, 0));
-    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.z, glm::vec3(0, 0, 1));
-    m_modelMatrix = glm::translate(m_modelMatrix, m_modelTranslate);
+    m_modelMatrix = glm::mat4();
+    m_modelMatrix *= glm::translate(glm::mat4(), m_modelTranslate);
+    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.z, glm::vec3(0, 0, 1));
+    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.y, glm::vec3(0, 1, 0));
+    m_modelMatrix *= glm::rotate(glm::mat4(), m_modelRotate.x, glm::vec3(1, 0, 0));
+    m_modelMatrix *= glm::scale(glm::mat4(), m_modelScale);
 
     updateMvpMatrix();
 }

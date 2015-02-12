@@ -417,6 +417,17 @@
    <class>SceneWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>scenewidget.h</header>
+   <slots>
+    <slot>setModelScaleX(float)</slot>
+    <slot>setModelScaleY(float)</slot>
+    <slot>setModelScaleZ(float)</slot>
+    <slot>setModelRotateX(float)</slot>
+    <slot>setModelRotateY(float)</slot>
+    <slot>setModelRotateZ(float)</slot>
+    <slot>setModelTranslateZ(float)</slot>
+    <slot>setModelTranslateY(float)</slot>
+    <slot>setModelTranslateX(float)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>FloatSlider</class>
@@ -570,6 +581,150 @@
     </hint>
     <hint type="destinationlabel">
      <x>301</x>
+     <y>370</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelScaleYSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelScaleY(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelScaleXSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelScaleX(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>168</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelScaleZSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelScaleZ(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelRotateXSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelRotateX(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelRotateYSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelRotateY(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelRotateZSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelRotateZ(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>297</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>292</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelTranslateXSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelTranslateX(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>314</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>473</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelTranslateYSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelTranslateY(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelTranslateZSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setModelTranslateZ(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
      <y>370</y>
     </hint>
    </hints>
