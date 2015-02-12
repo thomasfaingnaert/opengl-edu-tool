@@ -74,14 +74,11 @@ void SceneWidget::resizeGL(int w, int h)
     // Adjust perspective matrix
     float aspect = static_cast<float>(w) / h;
 
-    glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(2.5f, 2.5f, -1.0f));
-    glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    glm::mat4 perspective = glm::perspective(90.0f, aspect, 1.0f, 3.0f);
+    m_modelMatrix = glm::translate(glm::mat4(), glm::vec3(2.5f, 2.5f, -1.0f));
+    m_viewMatrix = glm::lookAt(glm::vec3(0, 0, 2), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    m_projectionMatrix = glm::perspective(90.0f, aspect, 1.0f, 3.0f);
 
-    m_mvpMatrix = perspective * view * model;
-    glUseProgram(m_program);
-    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
-    glUseProgram(0);
+    updateMvpMatrix();
 }
 
 void SceneWidget::initProgram()
@@ -320,4 +317,24 @@ void SceneWidget::initData()
     // Cleanup
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void SceneWidget::recalcModelMatrix()
+{
+    m_modelMatrix = glm::scale(glm::mat4(), m_modelScale);
+    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.x, glm::vec3(1, 0, 0));
+    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.y, glm::vec3(0, 1, 0));
+    m_modelMatrix = glm::rotate(m_modelMatrix, m_modelRotate.z, glm::vec3(0, 0, 1));
+    m_modelMatrix = glm::translate(m_modelMatrix, m_modelTranslate);
+
+    updateMvpMatrix();
+}
+
+void SceneWidget::updateMvpMatrix()
+{
+    m_mvpMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+
+    glUseProgram(m_program);
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
+    glUseProgram(0);
 }
