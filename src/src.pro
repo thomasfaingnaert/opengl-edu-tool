@@ -24,10 +24,12 @@ INCLUDEPATH += ../glm
 SOURCES += main.cpp\
         mainwindow.cpp \
     scenewidget.cpp \
-    floatslider.cpp
+    floatslider.cpp \
+    matrixwidget.cpp
 
 HEADERS  += mainwindow.h \
     scenewidget.h \
-    floatslider.h
+    floatslider.h \
+    matrixwidget.h
 
 FORMS    += mainwindow.ui
