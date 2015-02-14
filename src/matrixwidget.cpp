@@ -11,6 +11,7 @@ MatrixWidget::MatrixWidget(QWidget *parent) : QWidget(parent)
         for (size_t row = 0; row < 4; ++row)
         {
             m_labels[col][row] = new QLabel(this);
+            m_labels[col][row]->setAlignment(Qt::AlignCenter);
             grid->addWidget(m_labels[col][row], row, col, 1, 1);
         }
     }
