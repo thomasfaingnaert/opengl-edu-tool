@@ -33,6 +33,9 @@ public slots:
     void setModelTranslateY(float val) { m_modelTranslate.y = val; recalcModelMatrix(); }
     void setModelTranslateZ(float val) { m_modelTranslate.z = val; recalcModelMatrix(); }
 
+signals:
+    void modelMatrixChanged(const glm::mat4 &matrix);
+
 private:
     void initProgram();
     std::string getFileContents(const std::string &path) const;

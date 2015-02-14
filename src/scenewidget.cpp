@@ -335,6 +335,7 @@ void SceneWidget::recalcModelMatrix()
     m_modelMatrix *= glm::rotate(glm::mat4(), glm::radians(m_modelRotate.x), glm::vec3(1, 0, 0));
     m_modelMatrix *= glm::scale(glm::mat4(), m_modelScale);
 
+    emit modelMatrixChanged(m_modelMatrix);
     updateMvpMatrix();
 }
 
