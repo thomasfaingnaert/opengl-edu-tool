@@ -442,6 +442,7 @@
    <extends>QOpenGLWidget</extends>
    <header>scenewidget.h</header>
    <slots>
+    <signal>modelMatrixChanged(glm::mat4)</signal>
     <slot>setModelScaleX(float)</slot>
     <slot>setModelScaleY(float)</slot>
     <slot>setModelScaleZ(float)</slot>
@@ -467,6 +468,9 @@
    <extends>QWidget</extends>
    <header>matrixwidget.h</header>
    <container>1</container>
+   <slots>
+    <slot>setMatrix(glm::mat4)</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -756,6 +760,22 @@
     <hint type="destinationlabel">
      <x>437</x>
      <y>370</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sceneWidget</sender>
+   <signal>modelMatrixChanged(glm::mat4)</signal>
+   <receiver>widget</receiver>
+   <slot>setMatrix(glm::mat4)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>411</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>411</y>
     </hint>
    </hints>
   </connection>
