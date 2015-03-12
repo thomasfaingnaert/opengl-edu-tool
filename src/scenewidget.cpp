@@ -339,6 +339,11 @@ void SceneWidget::recalcModelMatrix()
     updateMvpMatrix();
 }
 
+void SceneWidget::recalcViewMatrix()
+{
+
+}
+
 void SceneWidget::updateMvpMatrix()
 {
     m_mvpMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;

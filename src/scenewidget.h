@@ -33,6 +33,19 @@ public slots:
     void setModelTranslateY(float val) { m_modelTranslate.y = val; recalcModelMatrix(); }
     void setModelTranslateZ(float val) { m_modelTranslate.z = val; recalcModelMatrix(); }
 
+    void setViewPositionX(float val) { m_viewPosition.x = val; recalcViewMatrix(); }
+    void setViewPositionY(float val) { m_viewPosition.y = val; recalcViewMatrix(); }
+    void setViewPositionZ(float val) { m_viewPosition.z = val; recalcViewMatrix(); }
+
+    void setViewTargetX(float val) { m_viewTarget.x = val; recalcViewMatrix(); }
+    void setViewTargetY(float val) { m_viewTarget.y = val; recalcViewMatrix(); }
+    void setViewTargetZ(float val) { m_viewTarget.z = val; recalcViewMatrix(); }
+
+    void setViewUpVecX(float val) { m_viewUpVec.x = val; recalcViewMatrix(); }
+    void setViewUpVecY(float val) { m_viewUpVec.y = val; recalcViewMatrix(); }
+    void setViewUpVecZ(float val) { m_viewUpVec.z = val; recalcViewMatrix(); }
+
+
 signals:
     void modelMatrixChanged(const glm::mat4 &matrix);
 
@@ -44,6 +57,7 @@ private:
     void initData();
 
     void recalcModelMatrix();
+    void recalcViewMatrix();
     void updateMvpMatrix();
 
     GLuint m_program;
@@ -63,6 +77,10 @@ private:
     glm::vec3 m_modelScale;
     glm::vec3 m_modelRotate;
     glm::vec3 m_modelTranslate;
+
+    glm::vec3 m_viewPosition;
+    glm::vec3 m_viewTarget;
+    glm::vec3 m_viewUpVec;
 };
 
 #endif // SCENEWIDGET_H
