@@ -458,7 +458,7 @@
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="FloatSlider" name="modelScaleXSlider_4">
+             <widget class="FloatSlider" name="viewPositionXSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -491,7 +491,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="FloatSlider" name="modelScaleYSlider_4">
+             <widget class="FloatSlider" name="viewPositionYSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -524,7 +524,7 @@
              </widget>
             </item>
             <item row="2" column="2">
-             <widget class="FloatSlider" name="modelScaleZSlider_4">
+             <widget class="FloatSlider" name="viewPositionZSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -564,7 +564,7 @@
              </widget>
             </item>
             <item row="3" column="2">
-             <widget class="FloatSlider" name="modelRotateXSlider_4">
+             <widget class="FloatSlider" name="viewTargetXSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -597,7 +597,7 @@
              </widget>
             </item>
             <item row="4" column="2">
-             <widget class="FloatSlider" name="modelRotateYSlider_4">
+             <widget class="FloatSlider" name="viewTargetYSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -630,7 +630,7 @@
              </widget>
             </item>
             <item row="5" column="2">
-             <widget class="FloatSlider" name="modelRotateZSlider_4">
+             <widget class="FloatSlider" name="viewTargetZSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -673,7 +673,7 @@
              </widget>
             </item>
             <item row="6" column="2">
-             <widget class="FloatSlider" name="modelTranslateXSlider_4">
+             <widget class="FloatSlider" name="viewUpXSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -706,7 +706,7 @@
              </widget>
             </item>
             <item row="7" column="2">
-             <widget class="FloatSlider" name="modelTranslateYSlider_4">
+             <widget class="FloatSlider" name="viewUpYSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -742,7 +742,7 @@
              </widget>
             </item>
             <item row="8" column="2">
-             <widget class="FloatSlider" name="modelTranslateZSlider_4">
+             <widget class="FloatSlider" name="viewUpZSlider">
               <property name="minimum">
                <number>-100</number>
               </property>
@@ -789,7 +789,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="MatrixWidget" name="widget_4" native="true"/>
+             <widget class="MatrixWidget" name="viewMatrixWidget" native="true"/>
             </item>
            </layout>
           </widget>
