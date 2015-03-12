@@ -1,5 +1,6 @@
 #include "scenewidget.h"
 #include <QSurfaceFormat>
+#include <QKeyEvent>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -20,6 +21,8 @@ SceneWidget::SceneWidget(QWidget *parent) :
     format.setSamples(4);
 
     setFormat(format);
+
+    this->setFocusPolicy(Qt::StrongFocus);
 }
 
 SceneWidget::~SceneWidget()
@@ -353,4 +356,54 @@ void SceneWidget::updateMvpMatrix()
     glUseProgram(m_program);
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
     glUseProgram(0);
+}
+
+void SceneWidget::keyPressEvent(QKeyEvent *event)
+{
+    constexpr float scale = 1.0f;
+    glm::vec3 forward = glm::normalize(m_viewTarget - m_viewPosition);
+    glm::vec3 right = glm::normalize(glm::cross(forward, m_viewUpVec));
+    glm::vec3 upward = glm::cross(right, forward);
+
+    switch (event->key())
+    {
+    case Qt::Key_Z:
+        m_viewPosition += scale * forward;
+        m_viewTarget += scale * forward;
+        recalcViewMatrix();
+        break;
+
+    case Qt::Key_S:
+        m_viewPosition -= scale * forward;
+        m_viewTarget -= scale * forward;
+        recalcViewMatrix();
+        break;
+
+    case Qt::Key_D:
+        m_viewPosition += scale * right;
+        m_viewTarget += scale * right;
+        recalcViewMatrix();
+        break;
+
+    case Qt::Key_Q:
+        m_viewPosition -= scale * right;
+        m_viewTarget -= scale * right;
+        recalcViewMatrix();
+        break;
+
+    case Qt::Key_A:
+        m_viewPosition += scale * upward;
+        m_viewTarget += scale * upward;
+        recalcViewMatrix();
+        break;
+
+    case Qt::Key_W:
+        m_viewPosition -= scale * upward;
+        m_viewTarget -= scale * upward;
+        recalcViewMatrix();
+        break;
+
+    default:
+        QOpenGLWidget::keyPressEvent(event);
+    }
 }

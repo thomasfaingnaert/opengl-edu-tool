@@ -19,6 +19,7 @@ protected:
     virtual void initializeGL();
     virtual void paintGL();
     virtual void resizeGL(int w, int h);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 public slots:
     void setModelScaleX(float val) { m_modelScale.x = val; recalcModelMatrix(); }
