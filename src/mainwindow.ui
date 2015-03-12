@@ -1167,5 +1167,149 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>viewPositionXSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_70</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>309</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewPositionYSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_72</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>195</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewPositionZSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_74</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewTargetXSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_77</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>263</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewTargetYSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_79</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewTargetZSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_81</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>247</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewUpXSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_84</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>214</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewUpYSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_86</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>344</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>345</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>viewUpZSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_88</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>371</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>372</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
