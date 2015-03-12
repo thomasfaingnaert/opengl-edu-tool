@@ -19,6 +19,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->modelTranslateXSlider->init();
     ui->modelTranslateYSlider->init();
     ui->modelTranslateZSlider->init();
+
+    // View matrix sliders
+    ui->viewPositionXSlider->init();
+    ui->viewPositionYSlider->init();
+    ui->viewPositionZSlider->init();
+
+    ui->viewTargetXSlider->init();
+    ui->viewTargetYSlider->init();
+    ui->viewTargetZSlider->init();
+
+    ui->viewUpXSlider->init();
+    ui->viewUpYSlider->init();
+    ui->viewUpZSlider->init();
 }
 
 MainWindow::~MainWindow()
