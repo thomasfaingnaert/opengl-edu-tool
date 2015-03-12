@@ -48,6 +48,7 @@ public slots:
 
 signals:
     void modelMatrixChanged(const glm::mat4 &matrix);
+    void viewMatrixChanged(const glm::mat4 &matrix);
 
 private:
     void initProgram();

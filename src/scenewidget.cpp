@@ -341,7 +341,9 @@ void SceneWidget::recalcModelMatrix()
 
 void SceneWidget::recalcViewMatrix()
 {
-
+    m_viewMatrix = glm::lookAt(m_viewPosition, m_viewTarget, m_viewUpVec);
+    emit viewMatrixChanged(m_viewMatrix);
+    updateMvpMatrix();
 }
 
 void SceneWidget::updateMvpMatrix()
