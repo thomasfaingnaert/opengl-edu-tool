@@ -84,8 +84,19 @@ void SceneWidget::paintGL()
     glBindVertexArray(m_gridVao);
     glDrawArrays(GL_LINES, 0, 86);
 
+    // Use frustum mvp matrix
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_frustumMvpMatrix));
+
+    // Draw frustum (only in world space)
+    if (m_currentSpace == Space::World)
+    {
+        glBindVertexArray(m_frustumVao);
+        glDrawElements(GL_LINES, 32, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
+    }
+
     // Restore old mvp matrix
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
+
 
     // Cleanup
     glBindVertexArray(0);
@@ -101,6 +112,9 @@ void SceneWidget::resizeGL(int w, int h)
     m_aspect = static_cast<float>(w) / h;
 
     m_projectionMatrix = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+
+    // Adjust frustum
+    updateFrustumData();
 
     updateMvpMatrix();
 }
@@ -206,6 +220,119 @@ void SceneWidget::initData()
 {
     initCubeData();
     initGridData();
+    initFrustumData();
+}
+
+void SceneWidget::updateFrustumData()
+{
+    // Recalculate data
+    const float nearPlane = -0.1f;
+    const float farPlane = -30.0f;
+    const float height = 2 * nearPlane * tan(90.0f / 2.0f);
+    const float width = height * m_aspect;
+
+    const float leftNear = -width / 2.0f;
+    const float rightNear = width / 2.0f;
+    const float bottomNear = -height / 2.0f;
+    const float topNear = height / 2.0f;
+
+    const float leftFar = leftNear * farPlane / nearPlane;
+    const float rightFar = rightNear * farPlane / nearPlane;
+    const float bottomFar = bottomNear * farPlane / nearPlane;
+    const float topFar = topNear * farPlane / nearPlane;
+
+    const GLfloat vertices[] =
+    {
+        0.0f, 0.0f, 0.0f,
+
+        leftNear, topNear, nearPlane,
+        rightNear, topNear, nearPlane,
+        rightNear, bottomNear, nearPlane,
+        leftNear, bottomNear, nearPlane,
+
+        leftFar, topFar, farPlane,
+        rightFar, topFar, farPlane,
+        rightFar, bottomFar, farPlane,
+        leftFar, bottomFar, farPlane,
+
+        leftNear, topNear, nearPlane,
+        rightNear, topNear, nearPlane,
+        rightNear, bottomNear, nearPlane,
+        leftNear, bottomNear, nearPlane,
+    };
+
+    // Update vertex VBO
+    glBindBuffer(GL_ARRAY_BUFFER, m_frustumVertexDataVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof vertices, vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void SceneWidget::initFrustumData()
+{
+    const GLfloat colours[] =
+    {
+        0.50f, 0.50f, 0.50f,
+
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+
+        0.50f, 0.50f, 0.50f,
+        0.50f, 0.50f, 0.50f,
+        0.50f, 0.50f, 0.50f,
+        0.50f, 0.50f, 0.50f,
+    };
+
+    const GLushort indices[] =
+    {
+        1, 5, 2, 6, 3, 7, 4, 8,
+        1, 2, 3, 4, 5, 6, 7, 8,
+        1, 4, 2, 3, 5, 8, 6, 7,
+        0, 9, 0, 10, 0, 11, 0, 12,
+    };
+
+    // Create and bind vao
+    glGenVertexArrays(1, &m_frustumVao);
+    glBindVertexArray(m_frustumVao);
+
+    // Create and bind position vbo
+    glGenBuffers(1, &m_frustumVertexDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_frustumVertexDataVbo);
+
+    // Fill position buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colours), nullptr, GL_STATIC_DRAW);
+
+    // Position attrib
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Create and bind colour vbo
+    glGenBuffers(1, &m_frustumColorDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_frustumColorDataVbo);
+
+    // Fill colour buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof colours, colours, GL_STATIC_DRAW);
+
+    // Colour attrib
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Create and bind index buffer
+    glGenBuffers(1, &m_frustumIndicesVbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_frustumIndicesVbo);
+
+    // Fill indices buffer
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof indices, indices, GL_STATIC_DRAW);
+
+    // Cleanup
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 void SceneWidget::initGridData()
@@ -506,29 +633,33 @@ void SceneWidget::updateMvpMatrix()
     {
         m_gridMvpMatrix = m_projectionMatrix * m_viewMatrix;
         m_mvpMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+        m_frustumMvpMatrix = m_projectionMatrix * m_viewMatrix * glm::inverse(m_viewMatrix);
         break;
     }
     case Space::View:
     {
-        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
         m_gridMvpMatrix = perspective * m_viewMatrix;
         m_mvpMatrix = perspective * m_viewMatrix * m_modelMatrix;
+        m_frustumMvpMatrix = perspective * m_viewMatrix * glm::inverse(m_viewMatrix);
         break;
     }
     case Space::World:
     {
         const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
         m_gridMvpMatrix = perspective * view;
         m_mvpMatrix = perspective * view * m_modelMatrix;
+        m_frustumMvpMatrix = perspective * view * glm::inverse(m_viewMatrix);
         break;
     }
     case Space::Model:
     {
         const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
         m_gridMvpMatrix = perspective * view;
         m_mvpMatrix = perspective * view;
+        m_frustumMvpMatrix = perspective * view * glm::inverse(m_viewMatrix);
         break;
     }
     default:

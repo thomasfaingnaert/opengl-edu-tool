@@ -64,6 +64,8 @@ private:
     void initData();
     void initCubeData();
     void initGridData();
+    void initFrustumData();
+    void updateFrustumData();
 
     void recalcModelMatrix();
     void recalcViewMatrix();
@@ -76,6 +78,10 @@ private:
     GLuint m_gridVao;
     GLuint m_gridVertexDataVbo;
     GLuint m_gridColorDataVbo;
+    GLuint m_frustumVao;
+    GLuint m_frustumVertexDataVbo;
+    GLuint m_frustumColorDataVbo;
+    GLuint m_frustumIndicesVbo;
     GLuint m_mvpMatrixUnif;
 
     glm::mat4 m_modelMatrix;
@@ -84,6 +90,7 @@ private:
 
     glm::mat4 m_mvpMatrix;
     glm::mat4 m_gridMvpMatrix;
+    glm::mat4 m_frustumMvpMatrix;
 
     constexpr static unsigned numOfVertices = 24;
 
