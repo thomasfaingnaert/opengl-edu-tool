@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
-    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewTarget(0.0f, 0.0f, -1.0f), m_viewUpVec(0.0f, 1.0f, 0.0f)
+    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, -1.0f), m_viewUpVec(0.0f, 1.0f, 0.0f)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
@@ -59,6 +59,10 @@ void SceneWidget::initializeGL()
     glDepthMask(GL_TRUE);
     glDepthRange(0.0f, 1.0f);
 
+    // Initialise view matrix
+    m_viewMatrix = glm::lookAt(m_viewPosition, m_viewTarget, m_viewUpVec);
+    recalcViewMatrix();
+
     initProgram();
     initData();
 }
@@ -98,7 +102,6 @@ void SceneWidget::resizeGL(int w, int h)
     float aspect = static_cast<float>(w) / h;
 
     recalcModelMatrix();
-    m_viewMatrix = glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
     m_projectionMatrix = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 30.0f);
 
     updateMvpMatrix();
