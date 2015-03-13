@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="modelTab">
         <attribute name="title">
@@ -815,6 +815,178 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Projectie Matrix</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_110">
+           <property name="text">
+            <string>&lt;h1&gt;Projectie Matrix&lt;/h1&gt;
+&lt;p&gt;In het tabbad 'Projectie Matrix' bepaalt u hoe de driedimensionale scène wordt geprojecteerd op een tweedimensionaal vlak. Aan de hand van 2 vlakken, het near en far vlak, en de field of view-hoek bepaalt u een symmetrisch frustum.&lt;/p&gt;</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="title">
+            <string>Frustum</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_90">
+              <property name="text">
+               <string>Near-vlak:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="FloatSlider" name="projectionNearSlider">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>2000</number>
+              </property>
+              <property name="value">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_92">
+              <property name="text">
+               <string>Far-vlak:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="FloatSlider" name="projectionFarSlider">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>2000</number>
+              </property>
+              <property name="value">
+               <number>300</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_91">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>(geen waarde)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_93">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>(geen waarde)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_94">
+              <property name="text">
+               <string>FOV:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="FloatSlider" name="projectionFovSlider">
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>180</number>
+              </property>
+              <property name="value">
+               <number>90</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="label_95">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>(geen waarde)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_10">
+           <property name="title">
+            <string>Projectie Matrix</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="MatrixWidget" name="viewMatrixWidget_2" native="true"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>299</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="SceneWidget" name="sceneWidget">
        <property name="sizePolicy">
@@ -838,6 +1010,7 @@
    <slots>
     <signal>modelMatrixChanged(glm::mat4)</signal>
     <signal>viewMatrixChanged(glm::mat4)</signal>
+    <signal>projectionMatrixChanged(glm::mat4)</signal>
     <slot>setModelScaleX(float)</slot>
     <slot>setModelScaleY(float)</slot>
     <slot>setModelScaleZ(float)</slot>
@@ -856,6 +1029,9 @@
     <slot>setViewUpVecX(float)</slot>
     <slot>setViewUpVecY(float)</slot>
     <slot>setViewUpVecZ(float)</slot>
+    <slot>setProjectionNear(float)</slot>
+    <slot>setProjectionFar(float)</slot>
+    <slot>setProjectionFov(float)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -890,8 +1066,8 @@
      <y>168</y>
     </hint>
     <hint type="destinationlabel">
-     <x>304</x>
-     <y>171</y>
+     <x>377</x>
+     <y>178</y>
     </hint>
    </hints>
   </connection>
@@ -906,8 +1082,8 @@
      <y>191</y>
     </hint>
     <hint type="destinationlabel">
-     <x>306</x>
-     <y>201</y>
+     <x>377</x>
+     <y>203</y>
     </hint>
    </hints>
   </connection>
@@ -922,8 +1098,8 @@
      <y>217</y>
     </hint>
     <hint type="destinationlabel">
-     <x>305</x>
-     <y>220</y>
+     <x>377</x>
+     <y>228</y>
     </hint>
    </hints>
   </connection>
@@ -938,8 +1114,8 @@
      <y>242</y>
     </hint>
     <hint type="destinationlabel">
-     <x>296</x>
-     <y>242</y>
+     <x>377</x>
+     <y>253</y>
     </hint>
    </hints>
   </connection>
@@ -954,8 +1130,8 @@
      <y>263</y>
     </hint>
     <hint type="destinationlabel">
-     <x>300</x>
-     <y>266</y>
+     <x>377</x>
+     <y>278</y>
     </hint>
    </hints>
   </connection>
@@ -986,8 +1162,8 @@
      <y>316</y>
     </hint>
     <hint type="destinationlabel">
-     <x>294</x>
-     <y>317</y>
+     <x>377</x>
+     <y>328</y>
     </hint>
    </hints>
   </connection>
@@ -1002,8 +1178,8 @@
      <y>343</y>
     </hint>
     <hint type="destinationlabel">
-     <x>297</x>
-     <y>344</y>
+     <x>377</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>
@@ -1018,8 +1194,8 @@
      <y>367</y>
     </hint>
     <hint type="destinationlabel">
-     <x>301</x>
-     <y>370</y>
+     <x>377</x>
+     <y>378</y>
     </hint>
    </hints>
   </connection>
@@ -1274,8 +1450,8 @@
      <y>290</y>
     </hint>
     <hint type="destinationlabel">
-     <x>304</x>
-     <y>296</y>
+     <x>377</x>
+     <y>303</y>
     </hint>
    </hints>
   </connection>
@@ -1290,8 +1466,8 @@
      <y>317</y>
     </hint>
     <hint type="destinationlabel">
-     <x>304</x>
-     <y>321</y>
+     <x>377</x>
+     <y>328</y>
     </hint>
    </hints>
   </connection>
@@ -1306,8 +1482,8 @@
      <y>344</y>
     </hint>
     <hint type="destinationlabel">
-     <x>299</x>
-     <y>345</y>
+     <x>377</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>
@@ -1484,6 +1660,118 @@
     <hint type="destinationlabel">
      <x>344</x>
      <y>411</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionNearSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_91</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionFarSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_93</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>294</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionFovSlider</sender>
+   <signal>stringValueChanged(QString)</signal>
+   <receiver>label_95</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>343</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionNearSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setProjectionNear(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>610</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionFarSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setProjectionFar(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectionFovSlider</sender>
+   <signal>scaledValueChanged(float)</signal>
+   <receiver>sceneWidget</receiver>
+   <slot>setProjectionFov(float)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>474</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sceneWidget</sender>
+   <signal>projectionMatrixChanged(glm::mat4)</signal>
+   <receiver>viewMatrixWidget_2</receiver>
+   <slot>setMatrix(glm::mat4)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>561</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>260</y>
     </hint>
    </hints>
   </connection>

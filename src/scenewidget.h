@@ -51,10 +51,15 @@ public slots:
     void setViewUpVecY(float val) { m_viewUpVec.y = val; recalcViewMatrix(); }
     void setViewUpVecZ(float val) { m_viewUpVec.z = val; recalcViewMatrix(); }
 
+    void setProjectionNear(float val) { m_projectionNear = val; recalcProjectionMatrix(); }
+    void setProjectionFar(float val) { m_projectionFar = val; recalcProjectionMatrix(); }
+    void setProjectionFov(float val) { m_projectionFov = val; recalcProjectionMatrix(); }
+
 
 signals:
     void modelMatrixChanged(const glm::mat4 &matrix);
     void viewMatrixChanged(const glm::mat4 &matrix);
+    void projectionMatrixChanged(const glm::mat4 &matrix);
 
 private:
     void initProgram();
@@ -69,6 +74,7 @@ private:
 
     void recalcModelMatrix();
     void recalcViewMatrix();
+    void recalcProjectionMatrix();
     void updateMvpMatrix();
 
     GLuint m_program;
@@ -105,6 +111,10 @@ private:
     glm::vec3 m_worldCameraPosition;
     glm::vec3 m_worldCameraTarget;
     glm::vec3 m_worldCameraUpVec;
+
+    float m_projectionNear;
+    float m_projectionFar;
+    float m_projectionFov;
 
     Space m_currentSpace;
     float m_aspect;

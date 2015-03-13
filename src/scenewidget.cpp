@@ -11,7 +11,7 @@
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, 0.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model),
-    m_worldCameraPosition(10.0f, 10.0f, 10.0f), m_worldCameraTarget(0.0f, 0.0f, 0.0f), m_worldCameraUpVec(0.0f, 1.0f, 0.0f)
+    m_worldCameraPosition(10.0f, 10.0f, 10.0f), m_worldCameraTarget(0.0f, 0.0f, 0.0f), m_worldCameraUpVec(0.0f, 1.0f, 0.0f), m_projectionNear(0.1f), m_projectionFar(30.0f), m_projectionFov(90.0f)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
@@ -67,6 +67,7 @@ void SceneWidget::initializeGL()
     // Update matrices
     recalcModelMatrix();
     recalcViewMatrix();
+    recalcProjectionMatrix();
 }
 
 void SceneWidget::paintGL()
@@ -113,7 +114,7 @@ void SceneWidget::resizeGL(int w, int h)
     // Adjust perspective matrix
     m_aspect = static_cast<float>(w) / h;
 
-    m_projectionMatrix = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+    m_projectionMatrix = glm::perspective(glm::radians(m_projectionFov), m_aspect, m_projectionNear, m_projectionFar);
 
     // Adjust frustum
     updateFrustumData();
@@ -624,6 +625,13 @@ void SceneWidget::recalcViewMatrix()
 {
     m_viewMatrix = glm::lookAt(m_viewPosition, m_viewTarget, m_viewUpVec);
     emit viewMatrixChanged(m_viewMatrix);
+    updateMvpMatrix();
+}
+
+void SceneWidget::recalcProjectionMatrix()
+{
+    m_projectionMatrix = glm::perspective(glm::radians(m_projectionFov), m_aspect, m_projectionNear, m_projectionFar);
+    emit projectionMatrixChanged(m_projectionMatrix);
     updateMvpMatrix();
 }
 

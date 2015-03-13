@@ -32,6 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->viewUpXSlider->init();
     ui->viewUpYSlider->init();
     ui->viewUpZSlider->init();
+
+    // Projection matrix sliders
+    ui->projectionNearSlider->init();
+    ui->projectionFarSlider->init();
+    ui->projectionFovSlider->init(1.0f, 0, "°");
 }
 
 MainWindow::~MainWindow()
