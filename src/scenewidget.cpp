@@ -7,9 +7,11 @@
 #include <stdexcept>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
-    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, 0.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model)
+    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, 0.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model),
+    m_worldCameraPosition(10.0f, 10.0f, 10.0f), m_worldCameraTarget(0.0f, 0.0f, 0.0f), m_worldCameraUpVec(0.0f, 1.0f, 0.0f)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
@@ -646,7 +648,7 @@ void SceneWidget::updateMvpMatrix()
     }
     case Space::World:
     {
-        const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 view = glm::lookAt(m_worldCameraPosition, m_worldCameraTarget, m_worldCameraUpVec);
         const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
         m_gridMvpMatrix = perspective * view;
         m_mvpMatrix = perspective * view * m_modelMatrix;
@@ -655,7 +657,7 @@ void SceneWidget::updateMvpMatrix()
     }
     case Space::Model:
     {
-        const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 view = glm::lookAt(m_worldCameraPosition, m_worldCameraTarget, m_worldCameraUpVec);
         const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
         m_gridMvpMatrix = perspective * view;
         m_mvpMatrix = perspective * view;
@@ -676,46 +678,56 @@ void SceneWidget::updateMvpMatrix()
 void SceneWidget::keyPressEvent(QKeyEvent *event)
 {
     constexpr float scale = 1.0f;
-    glm::vec3 forward = glm::normalize(m_viewTarget - m_viewPosition);
-    glm::vec3 right = glm::normalize(glm::cross(forward, m_viewUpVec));
+    glm::vec3 forward = glm::normalize(m_worldCameraTarget - m_worldCameraPosition);
+    glm::vec3 right = glm::normalize(glm::cross(forward, m_worldCameraUpVec));
     glm::vec3 upward = glm::cross(right, forward);
 
     switch (event->key())
     {
     case Qt::Key_Z:
-        m_viewPosition += scale * forward;
-        m_viewTarget += scale * forward;
-        recalcViewMatrix();
+        m_worldCameraPosition += scale * forward;
+        m_worldCameraTarget += scale * forward;
+        updateMvpMatrix();
         break;
 
     case Qt::Key_S:
-        m_viewPosition -= scale * forward;
-        m_viewTarget -= scale * forward;
-        recalcViewMatrix();
+        m_worldCameraPosition -= scale * forward;
+        m_worldCameraTarget -= scale * forward;
+        updateMvpMatrix();
         break;
 
     case Qt::Key_D:
-        m_viewPosition += scale * right;
-        m_viewTarget += scale * right;
-        recalcViewMatrix();
+        m_worldCameraPosition += scale * right;
+        m_worldCameraTarget += scale * right;
+        updateMvpMatrix();
         break;
 
     case Qt::Key_Q:
-        m_viewPosition -= scale * right;
-        m_viewTarget -= scale * right;
-        recalcViewMatrix();
+        m_worldCameraPosition -= scale * right;
+        m_worldCameraTarget -= scale * right;
+        updateMvpMatrix();
         break;
 
-    case Qt::Key_A:
-        m_viewPosition += scale * upward;
-        m_viewTarget += scale * upward;
-        recalcViewMatrix();
+    case Qt::Key_X:
+        m_worldCameraPosition += scale * upward;
+        m_worldCameraTarget += scale * upward;
+        updateMvpMatrix();
         break;
 
     case Qt::Key_W:
-        m_viewPosition -= scale * upward;
-        m_viewTarget -= scale * upward;
-        recalcViewMatrix();
+        m_worldCameraPosition -= scale * upward;
+        m_worldCameraTarget -= scale * upward;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_E:
+        m_worldCameraTarget += scale * right;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_A:
+        m_worldCameraTarget -= scale * right;
+        updateMvpMatrix();
         break;
 
     case Qt::Key_0:

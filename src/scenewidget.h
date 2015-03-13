@@ -102,6 +102,10 @@ private:
     glm::vec3 m_viewTarget;
     glm::vec3 m_viewUpVec;
 
+    glm::vec3 m_worldCameraPosition;
+    glm::vec3 m_worldCameraTarget;
+    glm::vec3 m_worldCameraUpVec;
+
     Space m_currentSpace;
     float m_aspect;
 };
