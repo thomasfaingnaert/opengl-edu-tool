@@ -57,15 +57,20 @@ private:
     GLuint compileShader(const std::string &path, GLenum type);
     void checkShaderErrors(GLuint shader, bool isProgram, GLenum param, const std::string &errorMsg);
     void initData();
+    void initCubeData();
+    void initGridData();
 
     void recalcModelMatrix();
     void recalcViewMatrix();
     void updateMvpMatrix();
 
     GLuint m_program;
-    GLuint m_vao;
-    GLuint m_vertexDataVbo;
-    GLuint m_indicesVbo;
+    GLuint m_cubeVao;
+    GLuint m_cubeVertexDataVbo;
+    GLuint m_cubeIndicesVbo;
+    GLuint m_gridVao;
+    GLuint m_gridVertexDataVbo;
+    GLuint m_gridColorDataVbo;
     GLuint m_mvpMatrixUnif;
 
     glm::mat4 m_modelMatrix;

@@ -68,10 +68,23 @@ void SceneWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(m_program);
-    glBindVertexArray(m_vao);
 
+    // Draw cube
+    glBindVertexArray(m_cubeVao);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
 
+    // Disable model matrix
+    glm::mat4 mvpMatrix = m_projectionMatrix * m_viewMatrix;
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+
+    // Draw grid
+    glBindVertexArray(m_gridVao);
+    glDrawArrays(GL_LINES, 0, 86);
+
+    // Restore old mvp matrix
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
+
+    // Cleanup
     glBindVertexArray(0);
     glUseProgram(0);
 }
@@ -190,6 +203,141 @@ GLuint SceneWidget::compileShader(const std::string &path, GLenum type)
 
 void SceneWidget::initData()
 {
+    initCubeData();
+    initGridData();
+}
+
+void SceneWidget::initGridData()
+{
+    // Grid constants
+    const int size = 20;
+    const float delta = 1.0f;
+
+    // Data
+    std::vector<GLfloat> vertices;
+    std::vector<GLfloat> colours;
+
+    // z-aligned line end points
+    for (int x = -size/2; x <= size/2; x += delta)
+    {
+        // vertices
+        vertices.push_back(x);
+        vertices.push_back(0);
+        vertices.push_back(delta * size / 2.0f);
+
+        vertices.push_back(x);
+        vertices.push_back(0);
+        vertices.push_back(- delta * size / 2.0f);
+
+        // colours
+        if (x != 0)
+        {
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+        }
+        else // z-axis
+        {
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(1.0f);
+
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(1.0f);
+        }
+    }
+
+    // x-aligned line end points
+    for (int z = -size/2; z <= size/2; z += delta)
+    {
+        // vertices
+        vertices.push_back(delta * size / 2.0f);
+        vertices.push_back(0);
+        vertices.push_back(z);
+
+        vertices.push_back(- delta * size / 2.0f);
+        vertices.push_back(0);
+        vertices.push_back(z);
+
+        // colours
+        if (z != 0)
+        {
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+        }
+        else // x-axis
+        {
+            colours.push_back(1.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+
+            colours.push_back(1.0f);
+            colours.push_back(0.0f);
+            colours.push_back(0.0f);
+        }
+    }
+
+    // y-axis vertices
+    vertices.push_back(0);
+    vertices.push_back(size / 2.0f);
+    vertices.push_back(0);
+
+    vertices.push_back(0);
+    vertices.push_back(- size / 2.0f);
+    vertices.push_back(0);
+
+    // y-axis colours
+    colours.push_back(0.0f);
+    colours.push_back(1.0f);
+    colours.push_back(0.0f);
+
+    colours.push_back(0.0f);
+    colours.push_back(1.0f);
+    colours.push_back(0.0f);
+
+    // Create and bind vao
+    glGenVertexArrays(1, &m_gridVao);
+    glBindVertexArray(m_gridVao);
+
+    // Create and bind position vbo
+    glGenBuffers(1, &m_gridVertexDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_gridVertexDataVbo);
+
+    // Fill position buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+    // Position attrib
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Create and bind colour vbo
+    glGenBuffers(1, &m_gridColorDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_gridColorDataVbo);
+
+    // Fill colour buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colours.size(), colours.data(), GL_STATIC_DRAW);
+
+    // Colour attrib
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Cleanup
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void SceneWidget::initCubeData()
+{
     // Data
     GLfloat data[] =
     {
@@ -299,16 +447,16 @@ void SceneWidget::initData()
     };
 
     // Create and bind vao
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
+    glGenVertexArrays(1, &m_cubeVao);
+    glBindVertexArray(m_cubeVao);
 
     // Create and bind position vbo
-    glGenBuffers(1, &m_vertexDataVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexDataVbo);
+    glGenBuffers(1, &m_cubeVertexDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_cubeVertexDataVbo);
 
     // Create and bind indices vbo
-    glGenBuffers(1, &m_indicesVbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicesVbo);
+    glGenBuffers(1, &m_cubeIndicesVbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeIndicesVbo);
 
     // Fill position buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof data, data, GL_STATIC_DRAW);
