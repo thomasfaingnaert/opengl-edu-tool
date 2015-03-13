@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
-    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, -1.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model)
+    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, 0.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
