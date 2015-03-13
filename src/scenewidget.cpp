@@ -229,9 +229,9 @@ void SceneWidget::initData()
 void SceneWidget::updateFrustumData()
 {
     // Recalculate data
-    const float nearPlane = -0.1f;
-    const float farPlane = -30.0f;
-    const float height = 2 * nearPlane * tan(90.0f / 2.0f);
+    const float nearPlane = -m_projectionNear;
+    const float farPlane = -m_projectionFar;
+    const float height = 2 * nearPlane * tan(glm::radians(m_projectionFov / 2.0f));
     const float width = height * m_aspect;
 
     const float leftNear = -width / 2.0f;
@@ -631,6 +631,7 @@ void SceneWidget::recalcViewMatrix()
 void SceneWidget::recalcProjectionMatrix()
 {
     m_projectionMatrix = glm::perspective(glm::radians(m_projectionFov), m_aspect, m_projectionNear, m_projectionFar);
+    updateFrustumData();
     emit projectionMatrixChanged(m_projectionMatrix);
     updateMvpMatrix();
 }
