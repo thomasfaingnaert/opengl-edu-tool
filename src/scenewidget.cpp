@@ -730,6 +730,16 @@ void SceneWidget::keyPressEvent(QKeyEvent *event)
         updateMvpMatrix();
         break;
 
+    case Qt::Key_R:
+        m_worldCameraTarget += scale * upward;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_F:
+        m_worldCameraTarget -= scale * upward;
+        updateMvpMatrix();
+        break;
+
     case Qt::Key_0:
         m_currentSpace = Space::Model;
         updateMvpMatrix();
