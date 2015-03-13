@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 SceneWidget::SceneWidget(QWidget *parent) :
-    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, -1.0f), m_viewUpVec(0.0f, 1.0f, 0.0f)
+    QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, -1.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model)
 {
     // Set opengl version & profile
     QSurfaceFormat format;
@@ -21,8 +21,7 @@ SceneWidget::SceneWidget(QWidget *parent) :
     format.setSamples(4);
 
     setFormat(format);
-
-    this->setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 SceneWidget::~SceneWidget()
@@ -59,12 +58,13 @@ void SceneWidget::initializeGL()
     glDepthMask(GL_TRUE);
     glDepthRange(0.0f, 1.0f);
 
-    // Initialise view matrix
-    m_viewMatrix = glm::lookAt(m_viewPosition, m_viewTarget, m_viewUpVec);
-    recalcViewMatrix();
-
+    // Init
     initProgram();
     initData();
+
+    // Update matrices
+    recalcModelMatrix();
+    recalcViewMatrix();
 }
 
 void SceneWidget::paintGL()
@@ -77,9 +77,8 @@ void SceneWidget::paintGL()
     glBindVertexArray(m_cubeVao);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
 
-    // Disable model matrix
-    glm::mat4 mvpMatrix = m_projectionMatrix * m_viewMatrix;
-    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+    // Use grid mvp matrix
+    glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_gridMvpMatrix));
 
     // Draw grid
     glBindVertexArray(m_gridVao);
@@ -99,10 +98,9 @@ void SceneWidget::resizeGL(int w, int h)
     glViewport(0, 0, w, h);
 
     // Adjust perspective matrix
-    float aspect = static_cast<float>(w) / h;
+    m_aspect = static_cast<float>(w) / h;
 
-    recalcModelMatrix();
-    m_projectionMatrix = glm::perspective(glm::radians(90.0f), aspect, 0.1f, 30.0f);
+    m_projectionMatrix = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
 
     updateMvpMatrix();
 }
@@ -502,11 +500,46 @@ void SceneWidget::recalcViewMatrix()
 
 void SceneWidget::updateMvpMatrix()
 {
-    m_mvpMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+    switch (m_currentSpace)
+    {
+    case Space::RenderedImage:
+    {
+        m_gridMvpMatrix = m_projectionMatrix * m_viewMatrix;
+        m_mvpMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+        break;
+    }
+    case Space::View:
+    {
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        m_gridMvpMatrix = perspective * m_viewMatrix;
+        m_mvpMatrix = perspective * m_viewMatrix * m_modelMatrix;
+        break;
+    }
+    case Space::World:
+    {
+        const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        m_gridMvpMatrix = perspective * view;
+        m_mvpMatrix = perspective * view * m_modelMatrix;
+        break;
+    }
+    case Space::Model:
+    {
+        const glm::mat4 view = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 30.0f);
+        m_gridMvpMatrix = perspective * view;
+        m_mvpMatrix = perspective * view;
+        break;
+    }
+    default:
+        throw std::runtime_error("Unknown space");
+    }
+
 
     glUseProgram(m_program);
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
     glUseProgram(0);
+    update();
 }
 
 void SceneWidget::keyPressEvent(QKeyEvent *event)
@@ -552,6 +585,26 @@ void SceneWidget::keyPressEvent(QKeyEvent *event)
         m_viewPosition -= scale * upward;
         m_viewTarget -= scale * upward;
         recalcViewMatrix();
+        break;
+
+    case Qt::Key_0:
+        m_currentSpace = Space::Model;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_1:
+        m_currentSpace = Space::World;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_2:
+        m_currentSpace = Space::View;
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_3:
+        m_currentSpace = Space::RenderedImage;
+        updateMvpMatrix();
         break;
 
     default:

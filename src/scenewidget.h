@@ -15,6 +15,11 @@ public:
     SceneWidget(QWidget *parent = 0);
     ~SceneWidget();
 
+    enum class Space
+    {
+        Model, World, View, RenderedImage
+    };
+
 protected:
     virtual void initializeGL();
     virtual void paintGL();
@@ -78,6 +83,7 @@ private:
     glm::mat4 m_projectionMatrix;
 
     glm::mat4 m_mvpMatrix;
+    glm::mat4 m_gridMvpMatrix;
 
     constexpr static unsigned numOfVertices = 24;
 
@@ -88,6 +94,9 @@ private:
     glm::vec3 m_viewPosition;
     glm::vec3 m_viewTarget;
     glm::vec3 m_viewUpVec;
+
+    Space m_currentSpace;
+    float m_aspect;
 };
 
 #endif // SCENEWIDGET_H
