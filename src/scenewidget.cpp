@@ -233,13 +233,13 @@ void SceneWidget::initGridData()
         // colours
         if (x != 0)
         {
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
 
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
         }
         else // z-axis
         {
@@ -268,13 +268,13 @@ void SceneWidget::initGridData()
         // colours
         if (z != 0)
         {
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
 
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
-            colours.push_back(0.0f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
+            colours.push_back(0.75f);
         }
         else // x-axis
         {
