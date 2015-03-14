@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <iterator>
 
 SceneWidget::SceneWidget(QWidget *parent) :
     QOpenGLWidget(parent), m_modelScale(1.0f, 1.0f, 1.0f), m_viewPosition(10.0f, 10.0f, 10.0f), m_viewTarget(0.0f, 0.0f, 0.0f), m_viewUpVec(0.0f, 1.0f, 0.0f), m_currentSpace(Space::Model),
@@ -76,9 +77,19 @@ void SceneWidget::paintGL()
 
     glUseProgram(m_program);
 
-    // Draw cube
-    glBindVertexArray(m_cubeVao);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
+    // Draw cube (if not in ndc space)
+    if (m_currentSpace != Space::NDC)
+    {
+        glBindVertexArray(m_cubeVao);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
+    }
+
+    // Draw NDC coords (only in ndc space)
+    else
+    {
+        glBindVertexArray(m_ndcVao);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
+    }
 
     // Use grid mvp matrix
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_gridMvpMatrix));
@@ -224,6 +235,7 @@ void SceneWidget::initData()
     initCubeData();
     initGridData();
     initFrustumData();
+    initNdcData();
 }
 
 void SceneWidget::updateFrustumData()
@@ -336,6 +348,215 @@ void SceneWidget::initFrustumData()
     // Cleanup
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void SceneWidget::updateNdcData()
+{
+    // Data
+    std::vector<glm::vec3> data =
+    {
+        /* POSITIONS */
+
+        // Front face
+        glm::vec3(-1.0f, -1.0f, +1.0f),
+        glm::vec3(-1.0f, +1.0f, +1.0f),
+        glm::vec3(+1.0f, +1.0f, +1.0f),
+        glm::vec3(+1.0f, -1.0f, +1.0f),
+
+        // Right face
+        glm::vec3(+1.0f, -1.0f, +1.0f),
+        glm::vec3(+1.0f, +1.0f, +1.0f),
+        glm::vec3(+1.0f, +1.0f, -1.0f),
+        glm::vec3(+1.0f, -1.0f, -1.0f),
+
+        // Top face
+        glm::vec3(-1.0f, +1.0f, +1.0f),
+        glm::vec3(-1.0f, +1.0f, -1.0f),
+        glm::vec3(+1.0f, +1.0f, -1.0f),
+        glm::vec3(+1.0f, +1.0f, +1.0f),
+
+        // Back face
+        glm::vec3(-1.0f, -1.0f, -1.0f),
+        glm::vec3(-1.0f, +1.0f, -1.0f),
+        glm::vec3(+1.0f, +1.0f, -1.0f),
+        glm::vec3(+1.0f, -1.0f, -1.0f),
+
+        // Left face
+        glm::vec3(-1.0f, -1.0f, +1.0f),
+        glm::vec3(-1.0f, +1.0f, +1.0f),
+        glm::vec3(-1.0f, +1.0f, -1.0f),
+        glm::vec3(-1.0f, -1.0f, -1.0f),
+
+        // Bottom face
+        glm::vec3(-1.0f, -1.0f, +1.0f),
+        glm::vec3(-1.0f, -1.0f, -1.0f),
+        glm::vec3(+1.0f, -1.0f, -1.0f),
+        glm::vec3(+1.0f, -1.0f, +1.0f),
+    };
+
+    // Loop through every coordinate
+    for (glm::vec3 &vertex : data)
+    {
+        // Convert to vec4
+        glm::vec4 vert4(vertex, 1.0f);
+
+        // Bring vertex in clip space
+        vert4 = m_projectionMatrix * m_viewMatrix * m_modelMatrix * vert4;
+
+        // Bring vertex into ndc-space
+        vert4 /= vert4.w;
+
+        // Convert back to vec3
+        vertex.x = vert4.x;
+        vertex.y = vert4.y;
+        vertex.z = vert4.z;
+    }
+
+    // Update buffer
+    glBindBuffer(GL_ARRAY_BUFFER, m_ndcVertexDataVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(GLfloat) * data.size(), data.data());
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void SceneWidget::initNdcData()
+{
+    // Data
+    GLfloat data[] =
+    {
+        /* POSITIONS */
+
+        // Front face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, +1.0f, +1.0f,
+        +1.0f, +1.0f, +1.0f,
+        +1.0f, -1.0f, +1.0f,
+
+        // Right face
+        +1.0f, -1.0f, +1.0f,
+        +1.0f, +1.0f, +1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+
+        // Top face
+        -1.0f, +1.0f, +1.0f,
+        -1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, +1.0f,
+
+        // Back face
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, +1.0f, -1.0f,
+        +1.0f, +1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+
+        // Left face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, +1.0f, +1.0f,
+        -1.0f, +1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+
+        // Bottom face
+        -1.0f, -1.0f, +1.0f,
+        -1.0f, -1.0f, -1.0f,
+        +1.0f, -1.0f, -1.0f,
+        +1.0f, -1.0f, +1.0f,
+
+        /* COLORS */
+
+        // Front face
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+
+        // Right face
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+
+        // Top face
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+
+        // Back face
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,
+
+        // Left face
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f,
+
+        // Bottom face
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
+    };
+
+    // Indices
+    GLushort indices[] =
+    {
+        // Front face
+        0, 1, 2,
+        0, 2, 3,
+
+        // Right face
+        4, 5, 6,
+        4, 6, 7,
+
+        // Top face
+        8, 9, 10,
+        8, 10, 11,
+
+        // Back face
+        12, 14, 13,
+        12, 15, 14,
+
+        // Left face
+        16, 18, 17,
+        16, 19, 18,
+
+        // Bottom face
+        20, 22, 21,
+        20, 23, 22,
+    };
+
+    // Create and bind vao
+    glGenVertexArrays(1, &m_ndcVao);
+    glBindVertexArray(m_ndcVao);
+
+    // Create and bind position vbo
+    glGenBuffers(1, &m_ndcVertexDataVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_ndcVertexDataVbo);
+
+    // Fill position vbo
+    glBufferData(GL_ARRAY_BUFFER, sizeof data, data, GL_STATIC_DRAW);
+
+    // Create and bind indices vbo
+    glGenBuffers(1, &m_ndcIndicesVbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ndcIndicesVbo);
+
+    // Position attrib
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(0));
+
+    // Color attrib
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(numOfVertices * 3 * sizeof(GLfloat)));
+
+    // Fill indices buffer
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof indices, indices, GL_STATIC_DRAW);
+
+    // Cleanup
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void SceneWidget::initGridData()
@@ -647,6 +868,15 @@ void SceneWidget::updateMvpMatrix()
         m_frustumMvpMatrix = m_projectionMatrix * m_viewMatrix * glm::inverse(m_viewMatrix);
         break;
     }
+    case Space::NDC:
+    {
+        const glm::mat4 view = glm::lookAt(m_worldCameraPosition, m_worldCameraTarget, m_worldCameraUpVec);
+        const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
+        m_gridMvpMatrix = perspective * view;
+        m_mvpMatrix = perspective * view;
+        m_frustumMvpMatrix = perspective * view * glm::inverse(m_viewMatrix);
+        break;
+    }
     case Space::View:
     {
         const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
@@ -681,6 +911,7 @@ void SceneWidget::updateMvpMatrix()
     glUseProgram(m_program);
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_mvpMatrix));
     glUseProgram(0);
+    updateNdcData();
     update();
 }
 
@@ -768,6 +999,12 @@ void SceneWidget::keyPressEvent(QKeyEvent *event)
         break;
 
     case Qt::Key_3:
+        m_currentSpace = Space::NDC;
+        emit currentSpaceChanged(m_currentSpace);
+        updateMvpMatrix();
+        break;
+
+    case Qt::Key_4:
         m_currentSpace = Space::RenderedImage;
         emit currentSpaceChanged(m_currentSpace);
         updateMvpMatrix();

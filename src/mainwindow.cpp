@@ -69,6 +69,9 @@ void MainWindow::onCurrentSpaceChanged(const SceneWidget::Space space)
     case SceneWidget::Space::View:
         spaceStr = "View space";
         break;
+    case SceneWidget::Space::NDC:
+        spaceStr = "NDC-space";
+        break;
     case SceneWidget::Space::RenderedImage:
         spaceStr = "Gerenderde afbeelding";
         break;

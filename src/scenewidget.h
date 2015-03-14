@@ -17,7 +17,7 @@ public:
 
     enum class Space
     {
-        Model, World, View, RenderedImage
+        Model, World, View, NDC, RenderedImage
     };
 
 protected:
@@ -71,7 +71,9 @@ private:
     void initCubeData();
     void initGridData();
     void initFrustumData();
+    void initNdcData();
     void updateFrustumData();
+    void updateNdcData();
 
     void recalcModelMatrix();
     void recalcViewMatrix();
@@ -89,6 +91,9 @@ private:
     GLuint m_frustumVertexDataVbo;
     GLuint m_frustumColorDataVbo;
     GLuint m_frustumIndicesVbo;
+    GLuint m_ndcVao;
+    GLuint m_ndcVertexDataVbo;
+    GLuint m_ndcIndicesVbo;
     GLuint m_mvpMatrixUnif;
 
     glm::mat4 m_modelMatrix;
