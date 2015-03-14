@@ -101,8 +101,8 @@ void SceneWidget::paintGL()
     // Use frustum mvp matrix
     glUniformMatrix4fv(m_mvpMatrixUnif, 1, GL_FALSE, glm::value_ptr(m_frustumMvpMatrix));
 
-    // Draw frustum (only in world space)
-    if (m_currentSpace == Space::World)
+    // Draw frustum (only in world space & view space)
+    if (m_currentSpace == Space::World || m_currentSpace == Space::View)
     {
         glBindVertexArray(m_frustumVao);
         glDrawElements(GL_LINES, 32, GL_UNSIGNED_SHORT, reinterpret_cast<void*>(0));
@@ -879,10 +879,11 @@ void SceneWidget::updateMvpMatrix()
     }
     case Space::View:
     {
+        const glm::mat4 view = glm::lookAt(m_worldCameraPosition, m_worldCameraTarget, m_worldCameraUpVec);
         const glm::mat4 perspective = glm::perspective(glm::radians(90.0f), m_aspect, 0.1f, 200.0f);
-        m_gridMvpMatrix = perspective * m_viewMatrix;
-        m_mvpMatrix = perspective * m_viewMatrix * m_modelMatrix;
-        m_frustumMvpMatrix = perspective * m_viewMatrix * glm::inverse(m_viewMatrix);
+        m_gridMvpMatrix = perspective * view;
+        m_mvpMatrix = perspective * view * m_viewMatrix * m_modelMatrix;
+        m_frustumMvpMatrix = perspective * view;
         break;
     }
     case Space::World:
