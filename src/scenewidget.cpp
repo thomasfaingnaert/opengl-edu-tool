@@ -751,21 +751,25 @@ void SceneWidget::keyPressEvent(QKeyEvent *event)
 
     case Qt::Key_0:
         m_currentSpace = Space::Model;
+        emit currentSpaceChanged(m_currentSpace);
         updateMvpMatrix();
         break;
 
     case Qt::Key_1:
         m_currentSpace = Space::World;
+        emit currentSpaceChanged(m_currentSpace);
         updateMvpMatrix();
         break;
 
     case Qt::Key_2:
         m_currentSpace = Space::View;
+        emit currentSpaceChanged(m_currentSpace);
         updateMvpMatrix();
         break;
 
     case Qt::Key_3:
         m_currentSpace = Space::RenderedImage;
+        emit currentSpaceChanged(m_currentSpace);
         updateMvpMatrix();
         break;
 

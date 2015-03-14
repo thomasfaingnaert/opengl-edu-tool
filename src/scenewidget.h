@@ -60,6 +60,7 @@ signals:
     void modelMatrixChanged(const glm::mat4 &matrix);
     void viewMatrixChanged(const glm::mat4 &matrix);
     void projectionMatrixChanged(const glm::mat4 &matrix);
+    void currentSpaceChanged(const Space space);
 
 private:
     void initProgram();
